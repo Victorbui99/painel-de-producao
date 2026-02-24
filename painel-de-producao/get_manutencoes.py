@@ -120,27 +120,30 @@ def get_rampas(lugar_id, token):
         data = r.json()["dataResult"]["manutencoes"]
         dict_rampas = []
         for manutencao in data:
-            if "alinh" in manutencao["plataforma"].lower() or "iot" in manutencao["plataforma"].lower():
-                continue
-            box_rapido = False
-            tipo_manutencao = None
-            plataforma = manutencao["plataforma"]
-            mecanico = manutencao["ultimoMecanicoNome"]
-            placa = manutencao["placa"]
-            if manutencao["tipo"] in [3,4,6,9,15]:
-                tipo_manutencao = "Interna"
-            if manutencao["tipo"] in [1,2,5,7,10,11,12,13]:
-                tipo_manutencao = "Cliente"
-            if "box" in manutencao["plataforma"].lower():
-                box_rapido = True
+            try:
+                if "alinh" in manutencao["plataforma"].lower() or "iot" in manutencao["plataforma"].lower():
+                    continue
+                box_rapido = False
+                tipo_manutencao = None
+                plataforma = manutencao["plataforma"]
+                mecanico = manutencao["ultimoMecanicoNome"]
+                placa = manutencao["placa"]
+                if manutencao["tipo"] in [3,4,6,9,15]:
+                    tipo_manutencao = "Interna"
+                if manutencao["tipo"] in [1,2,5,7,10,11,12,13]:
+                    tipo_manutencao = "Cliente"
+                if "box" in manutencao["plataforma"].lower():
+                    box_rapido = True
 
-            dict_rampas.append({
-                "plataforma": plataforma,
-                "mecanico": mecanico,
-                "tipo_manutencao": tipo_manutencao,
-                "box_rapido": box_rapido,
-                "placa": placa,
-            })
+                dict_rampas.append({
+                    "plataforma": plataforma,
+                    "mecanico": mecanico,
+                    "tipo_manutencao": tipo_manutencao,
+                    "box_rapido": box_rapido,
+                    "placa": placa,
+                })
+            except Exception as e:
+                continue
             
         return dict_rampas
 
@@ -151,4 +154,4 @@ def get_rampas(lugar_id, token):
                 "tipo_manutencao": "Erro",
                 "box_rapido": False,
                 "placa": "Erro",
-        }
+            }
